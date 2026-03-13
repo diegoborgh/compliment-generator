@@ -210,11 +210,31 @@ function pickCardImage() {
 }
 
 function setCardBackground(imagePath) {
+  const FADE_MS = 900;
+
   if (imagePath) {
-    dom.cardInner.style.setProperty("--bg-image", `url('${imagePath}')`);
-    dom.cardInner.classList.add("has-bg-image");
+    // Add new layer on top, fade it in
+    const layer = document.createElement("div");
+    layer.className = "card-bg-layer";
+    layer.style.backgroundImage = `url('${imagePath}')`;
+    dom.cardInner.appendChild(layer);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => layer.classList.add("visible"));
+    });
+
+    // Fade out and remove any older layers once the new one is visible
+    const old = dom.cardInner.querySelectorAll(".card-bg-layer:not(:last-child)");
+    old.forEach((el) => {
+      el.classList.remove("visible");
+      setTimeout(() => el.remove(), FADE_MS);
+    });
   } else {
-    dom.cardInner.classList.remove("has-bg-image");
+    // Fade out and remove all layers
+    dom.cardInner.querySelectorAll(".card-bg-layer").forEach((el) => {
+      el.classList.remove("visible");
+      setTimeout(() => el.remove(), FADE_MS);
+    });
   }
 }
 
@@ -339,11 +359,17 @@ function personalize(text) {
 function displayContent() {
   dom.compliment.classList.add("exit");
 
+  // Kick off the background dissolve immediately, in sync with the text exit
+  if (state.mode === "compliments") {
+    setCardBackground(pickCardImage());
+  } else {
+    setCardBackground(null);
+  }
+
   setTimeout(() => {
     state.hasGenerated = true;
 
     if (state.mode === "jokes") {
-      setCardBackground(null);
       const joke = pickJoke();
       state.currentText = `${joke.setup} — ${joke.punchline}`;
 
@@ -366,7 +392,6 @@ function displayContent() {
       punchline.addEventListener("click", reveal);
 
     } else {
-      setCardBackground(pickCardImage());
       const raw = pickCompliment();
       const text = personalize(raw);
       state.currentText = raw;

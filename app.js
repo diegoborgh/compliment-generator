@@ -299,6 +299,7 @@ function setCardBackground(imagePath) {
    5. MODE SWITCHING
    ================================================================ */
 function setMode(mode) {
+  if (mode === state.mode) return;
   state.mode = mode;
 
   dom.modeCompliments.classList.toggle("active", mode === "compliments");
@@ -311,7 +312,7 @@ function setMode(mode) {
   dom.generateLabel.textContent =
     mode === "jokes" ? "Tell Me a Joke" : "Generate Compliment";
 
-  if (mode === "jokes") setCardBackground(null);
+  displayContent();
 }
 
 

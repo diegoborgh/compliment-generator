@@ -451,7 +451,7 @@ button, input, select {
 }
 
 [data-theme="dark"] .card-bg-layer.visible {
-  opacity: 0.12;
+  opacity: 0.6;
 }
 
 [data-theme="dark"] .card-inner {
@@ -501,6 +501,10 @@ button, input, select {
 .compliment.enter {
   opacity: 0;
   transform: translateY(-10px) scale(0.98);
+}
+
+[data-theme="dark"] .compliment {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 

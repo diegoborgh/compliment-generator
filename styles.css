@@ -1,0 +1,1067 @@
+/* ================================================================
+   styles.css — Uplift Compliment Generator
+   ================================================================
+   Sections:
+     1. Custom Properties (Design Tokens)
+     2. Dark Mode Overrides
+     3. Reset / Base
+     4. Background Scene (blobs, particles)
+     5. Layout
+     6. Logo
+     7. Glass Buttons (shared)
+     8. Controls (inputs, select)
+     9. Compliment Card
+    10. Action Chips
+    11. Generate Button
+    12. Toast
+    13. Modal
+    14. Confetti
+    15. Hero / Typography
+    16. Footer
+    17. Utilities
+    18. Animations / Keyframes
+    19. Responsive Breakpoints
+   ================================================================ */
+
+
+/* ================================================================
+   1. CUSTOM PROPERTIES
+   ================================================================ */
+:root {
+  /* Palette */
+  --c-primary:      #FF6B6B;
+  --c-primary-soft: #FFB4A2;
+  --c-accent:       #957FEF;
+  --c-accent-light: #B8A9C9;
+  --c-gold:         #F4C95D;
+  --c-gold-soft:    #FFF3D4;
+  --c-green:        #E8A0BF;
+  --c-success:      #4CAF50;
+
+  /* Card gradient — swapped green for a warm coral-peach */
+  --c-card-grad-a:  #FF6B6B;
+  --c-card-grad-b:  #957FEF;
+  --c-card-grad-c:  #F4C95D;
+  --c-card-grad-d:  #FFB4A2;
+
+  /* Surfaces — slightly richer/warmer base for better blob visibility */
+  --c-bg:           #EDE4D8;
+  --c-surface:      #FAF5EE;
+  --c-surface-alt:  #F2EBE0;
+  --c-glass:        rgba(255, 248, 240, 0.45);
+  --c-glass-strong: rgba(255, 248, 242, 0.55);
+  --c-glass-border: rgba(255, 255, 255, 0.45);
+
+  /* Text */
+  --c-heading:      #1A1A1A;
+  --c-text:         #2D2D2D;
+  --c-muted:        #7A7A7A;
+  --c-border:       rgba(0, 0, 0, 0.07);
+  --c-shadow:       rgba(0, 0, 0, 0.08);
+  --c-glow:         rgba(255, 107, 107, 0.14);
+
+  /* Typography */
+  --f-heading: 'DM Serif Display', serif;
+  --f-body:    'DM Sans', sans-serif;
+
+  /* Spacing */
+  --s-xs:  6px;
+  --s-sm:  12px;
+  --s-md:  20px;
+  --s-lg:  32px;
+  --s-xl:  48px;
+  --s-2xl: 72px;
+
+  /* Radii */
+  --r-sm:   10px;
+  --r-md:   16px;
+  --r-lg:   24px;
+  --r-xl:   32px;
+  --r-full: 999px;
+
+  /* Transitions */
+  --t-fast:   0.18s ease;
+  --t-med:    0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-slow:   0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ================================================================
+   2. DARK MODE OVERRIDES
+   ================================================================ */
+[data-theme="dark"] {
+  --c-bg:           #0F0F14;
+  --c-surface:      #1A1A24;
+  --c-surface-alt:  #242430;
+  --c-glass:        rgba(26, 26, 36, 0.65);
+  --c-glass-strong: rgba(26, 26, 36, 0.85);
+  --c-glass-border: rgba(255, 255, 255, 0.06);
+  --c-heading:      #FFFFFF;
+  --c-text:         #E0E0EA;
+  --c-muted:        #7878A0;
+  --c-border:       rgba(255, 255, 255, 0.06);
+  --c-shadow:       rgba(0, 0, 0, 0.4);
+  --c-glow:         rgba(149, 127, 239, 0.1);
+  --c-gold-soft:    rgba(244, 201, 93, 0.08);
+}
+
+
+/* ================================================================
+   3. RESET / BASE
+   ================================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--f-body);
+  background: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.6s ease, color 0.4s ease;
+}
+
+button, input, select {
+  font-family: var(--f-body);
+}
+
+::selection {
+  background: var(--c-primary-soft);
+  color: var(--c-heading);
+}
+
+[data-theme="dark"] ::selection {
+  background: var(--c-accent);
+  color: #fff;
+}
+
+
+/* ================================================================
+   4. BACKGROUND SCENE
+   ================================================================ */
+.bg-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Gradient blobs — four for extra depth */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+[data-theme="dark"] .blob {
+  opacity: 0.08;
+}
+
+.blob-1 {
+  width: 55vw; height: 55vw;
+  max-width: 650px; max-height: 650px;
+  background: var(--c-primary-soft);
+  top: -15%; left: -10%;
+  animation: blobA 20s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  width: 45vw; height: 45vw;
+  max-width: 550px; max-height: 550px;
+  background: var(--c-accent-light);
+  bottom: -12%; right: -8%;
+  animation: blobB 22s ease-in-out infinite alternate;
+}
+
+.blob-3 {
+  width: 30vw; height: 30vw;
+  max-width: 380px; max-height: 380px;
+  background: var(--c-gold);
+  top: 50%; left: 55%;
+  animation: blobC 18s ease-in-out infinite alternate;
+}
+
+.blob-4 {
+  width: 25vw; height: 25vw;
+  max-width: 300px; max-height: 300px;
+  background: var(--c-green);
+  top: 20%; right: 20%;
+  opacity: 0.45;
+  animation: blobD 24s ease-in-out infinite alternate;
+}
+
+[data-theme="dark"] .blob-4 { opacity: 0.05; }
+
+/* Particle canvas fills the background scene */
+#particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ================================================================
+   5. LAYOUT
+   ================================================================ */
+.app {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--s-md) var(--s-md) var(--s-xl);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s-sm) 0;
+  margin-bottom: var(--s-lg);
+  animation: fadeDown 0.6s ease-out both;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-lg);
+  flex: 1;
+  animation: fadeUp 0.7s ease-out 0.1s both;
+}
+
+
+/* ================================================================
+   6. LOGO
+   ================================================================ */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--c-heading);
+}
+
+.logo-icon {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation: heartPulse 2.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: var(--f-heading);
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--s-xs);
+}
+
+
+/* ================================================================
+   7. GLASS BUTTONS (shared icon button style)
+   ================================================================ */
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--c-glass-border);
+  background: var(--c-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--c-text);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.glass-btn svg {
+  width: 18px; height: 18px;
+}
+
+.glass-btn:hover {
+  transform: scale(1.08);
+  background: var(--c-glass-strong);
+  box-shadow: 0 4px 16px var(--c-shadow);
+}
+
+.glass-btn:active {
+  transform: scale(0.95);
+}
+
+.glass-btn:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* Favorites badge */
+.favs-wrapper {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -3px; right: -3px;
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--c-gold);
+  color: #1A1A1A;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0);
+  transition: transform var(--t-bounce);
+  pointer-events: none;
+}
+
+.badge.show {
+  transform: scale(1);
+}
+
+
+/* ================================================================
+   8. CONTROLS
+   ================================================================ */
+.controls {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-sm);
+}
+
+.input-group {
+  flex: 1 1 200px;
+  min-width: 0;
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  color: var(--c-muted);
+  pointer-events: none;
+  transition: color var(--t-fast);
+}
+
+.ctrl-input {
+  width: 100%;
+  padding: 13px 16px 13px 42px;
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--c-border);
+  background: var(--c-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 0.9rem;
+  color: var(--c-text);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+}
+
+.ctrl-input::placeholder {
+  color: var(--c-muted);
+}
+
+.ctrl-input:focus {
+  outline: none;
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 4px rgba(149, 127, 239, 0.1);
+  background: var(--c-glass-strong);
+}
+
+.ctrl-input:focus + .input-icon,
+.input-group:focus-within .input-icon {
+  color: var(--c-accent);
+}
+
+select.ctrl-input {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237A7A7A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+
+/* ================================================================
+   9. COMPLIMENT CARD
+   ================================================================ */
+.card {
+  width: 100%;
+  position: relative;
+  border-radius: var(--r-xl);
+  padding: 0;
+  background: transparent;
+}
+
+.card-glow {
+  display: none;
+}
+
+.card-inner {
+  position: relative;
+  background: rgba(255, 248, 242, 0.55);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-radius: var(--r-xl);
+  padding: var(--s-xl) var(--s-lg);
+  text-align: center;
+  overflow: hidden;
+  transition: background 0.5s ease;
+  border: none;
+  box-shadow: none;
+}
+
+[data-theme="dark"] .card-inner {
+  background: rgba(26, 26, 36, 0.6);
+  box-shadow: none;
+}
+
+/* Top shine line */
+.card-inner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  z-index: 2;
+}
+
+[data-theme="dark"] .card-inner::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+/* Watermark — hidden */
+.card-watermark {
+  display: none;
+}
+
+/* Watercolor background image */
+.card-bg-art {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-xl);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.card-bg-art.visible {
+  opacity: 1;
+}
+
+.card-bg-art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+[data-theme="dark"] .card-bg-art {
+  opacity: 0;
+}
+
+[data-theme="dark"] .card-bg-art.visible {
+  opacity: 0.35;
+}
+
+/* Ensure card content sits above the watercolor wash ::after */
+.category-pill,
+.compliment,
+.card-actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* Category pill */
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 16px;
+  border-radius: var(--r-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--c-surface-alt);
+  color: var(--c-muted);
+  margin-bottom: var(--s-md);
+  transition: all var(--t-med);
+}
+
+.pill-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--c-muted);
+  transition: background var(--t-med);
+}
+
+/* Category dot colors */
+.pill-encouragement .pill-dot { background: var(--c-primary); }
+.pill-professional .pill-dot  { background: var(--c-accent); }
+.pill-humor .pill-dot          { background: var(--c-gold); }
+/* Kindness: warm coral-pink instead of green */
+.pill-kindness .pill-dot       { background: #F07A7A; }
+
+/* Compliment text */
+.compliment {
+  position: relative;
+  z-index: 1;
+  font-family: var(--f-heading);
+  font-size: clamp(1.3rem, 3.2vw, 2.15rem);
+  color: var(--c-heading);
+  line-height: 1.45;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-sm) 0;
+  border: none;
+  margin: 0;
+  quotes: "\u201C" "\u201D";
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.compliment.exit {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+}
+
+.compliment.enter {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+}
+
+
+/* ================================================================
+   10. ACTION CHIPS
+   ================================================================ */
+.card-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--s-sm);
+  margin-top: var(--s-lg);
+  flex-wrap: wrap;
+}
+
+.action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--c-border);
+  background: var(--c-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.action-chip svg {
+  width: 15px; height: 15px;
+  flex-shrink: 0;
+}
+
+.action-chip:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--c-shadow);
+}
+
+.action-chip:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.action-chip:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* Favorited state */
+.action-chip.faved {
+  border-color: var(--c-gold);
+  color: var(--c-gold);
+  background: var(--c-gold-soft);
+}
+
+.action-chip.faved svg {
+  fill: var(--c-gold);
+}
+
+/* Copied state */
+.action-chip.copied {
+  border-color: var(--c-success);
+  color: var(--c-success);
+}
+
+
+/* ================================================================
+   11. GENERATE BUTTON
+   ================================================================ */
+.generate-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.generate-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 17px 42px;
+  border-radius: var(--r-full);
+  border: none;
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-accent) 100%);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  letter-spacing: 0.01em;
+  box-shadow:
+    0 6px 24px rgba(255, 107, 107, 0.3),
+    0 2px 8px rgba(149, 127, 239, 0.2);
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+
+.generate-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 12px 36px rgba(255, 107, 107, 0.35),
+    0 4px 12px rgba(149, 127, 239, 0.25);
+}
+
+.generate-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.generate-btn:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 3px;
+}
+
+/* Sparkle emoji bounce */
+.btn-sparkle {
+  display: inline-block;
+  animation: sparkleFloat 2s ease-in-out infinite;
+}
+
+/* Shimmer sweep */
+.generate-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3.5s ease-in-out infinite;
+}
+
+/* Ripple on click */
+.generate-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: rippleAnim 0.55s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Counter */
+.counter {
+  font-size: 0.75rem;
+  color: var(--c-muted);
+  height: 18px;
+  transition: color var(--t-fast);
+}
+
+
+/* ================================================================
+   12. TOAST
+   ================================================================ */
+.toast {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(70px);
+  padding: 13px 28px;
+  border-radius: var(--r-full);
+  background: var(--c-heading);
+  color: var(--c-bg);
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+
+/* ================================================================
+   13. MODAL
+   ================================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-med);
+  padding: var(--s-md);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  width: 100%;
+  max-width: 520px;
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--c-border);
+  transform: translateY(24px) scale(0.96);
+  transition: transform var(--t-med);
+}
+
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s-md) var(--s-md) var(--s-sm);
+}
+
+.modal-header h2 {
+  font-family: var(--f-heading);
+  font-size: 1.4rem;
+  color: var(--c-heading);
+}
+
+.modal-body {
+  padding: 0 var(--s-md) var(--s-md);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.fav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+}
+
+.fav-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-sm);
+  padding: var(--s-sm) var(--s-md);
+  border-radius: var(--r-md);
+  background: var(--c-surface-alt);
+  animation: fadeIn 0.35s ease-out both;
+}
+
+.fav-item p {
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.fav-cat {
+  font-size: 0.68rem;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+.fav-remove {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--c-muted);
+  padding: 4px;
+  transition: color var(--t-fast), transform var(--t-fast);
+}
+
+.fav-remove:hover {
+  color: var(--c-primary);
+  transform: scale(1.15);
+}
+
+.fav-remove:focus-visible {
+  outline: 2px solid var(--c-accent);
+  border-radius: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--s-xl) 0;
+  color: var(--c-muted);
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: var(--s-sm);
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   14. CONFETTI
+   ================================================================ */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 150;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confettiFall 1s ease-out forwards;
+}
+
+
+/* ================================================================
+   15. HERO / TYPOGRAPHY
+   ================================================================ */
+.hero-text {
+  text-align: center;
+  padding: 0 var(--s-sm);
+}
+
+.hero-text h1 {
+  font-family: var(--f-heading);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: var(--c-heading);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.hero-text em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+/* ================================================================
+   16. FOOTER
+   ================================================================ */
+.footer {
+  margin-top: auto;
+  padding-top: var(--s-xl);
+  font-size: 0.72rem;
+  color: var(--c-muted);
+  text-align: center;
+  opacity: 0.5;
+}
+
+
+/* ================================================================
+   17. UTILITIES
+   ================================================================ */
+.hidden {
+  display: none !important;
+}
+
+
+/* ================================================================
+   18. ANIMATIONS / KEYFRAMES
+   ================================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  12%      { transform: scale(1.18); }
+  24%      { transform: scale(1); }
+}
+
+@keyframes borderShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0%   { left: -75%; }
+  100% { left: 125%; }
+}
+
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-3px) rotate(8deg); }
+}
+
+@keyframes rippleAnim {
+  to { transform: scale(3); opacity: 0; }
+}
+
+@keyframes confettiFall {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.2); }
+}
+
+@keyframes blobA {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(50px, -40px) scale(1.1); }
+  100% { transform: translate(-25px, 45px) scale(0.94); }
+}
+
+@keyframes blobB {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-35px, 30px) scale(1.12); }
+  100% { transform: translate(30px, -40px) scale(0.9); }
+}
+
+@keyframes blobC {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(30px, 25px) scale(1.08); }
+  100% { transform: translate(-35px, -25px) scale(0.95); }
+}
+
+@keyframes blobD {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-20px, -30px) scale(1.15); }
+  100% { transform: translate(20px, 20px) scale(0.9); }
+}
+
+
+/* ================================================================
+   19. RESPONSIVE BREAKPOINTS
+   ================================================================ */
+@media (max-width: 640px) {
+  .card-inner {
+    padding: var(--s-lg) var(--s-md);
+  }
+
+  .card-watermark {
+    font-size: 5.5rem;
+  }
+
+  .generate-btn {
+    padding: 15px 32px;
+    font-size: 0.95rem;
+  }
+
+  .controls {
+    gap: var(--s-xs);
+  }
+
+  .header {
+    margin-bottom: var(--s-md);
+  }
+
+  .card-actions {
+    gap: 8px;
+  }
+
+  /* Hide action label text on small screens, keep icons */
+  .action-chip span:not(:first-child) {
+    display: none;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(1.5rem, 6vw, 2.2rem);
+  }
+}
+
+@media (max-width: 380px) {
+  .app {
+    padding: var(--s-sm) var(--s-sm) var(--s-lg);
+  }
+
+  .card-inner {
+    padding: var(--s-md);
+  }
+
+  .compliment {
+    font-size: 1.15rem;
+    min-height: 80px;
+  }
+}

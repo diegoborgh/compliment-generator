@@ -1,26 +1,5 @@
 /* ================================================================
-   styles.css — Uplift Compliment Generator
-   ================================================================
-   Sections:
-     1. Custom Properties (Design Tokens)
-     2. Dark Mode Overrides
-     3. Reset / Base
-     4. Background Scene (blobs, particles)
-     5. Layout
-     6. Logo
-     7. Glass Buttons (shared)
-     8. Controls (inputs, select)
-     9. Compliment Card
-    10. Action Chips
-    11. Generate Button
-    12. Toast
-    13. Modal
-    14. Confetti
-    15. Hero / Typography
-    16. Footer
-    17. Utilities
-    18. Animations / Keyframes
-    19. Responsive Breakpoints
+   styles.css — Uplift Compliment & Joke Generator
    ================================================================ */
 
 
@@ -28,7 +7,6 @@
    1. CUSTOM PROPERTIES
    ================================================================ */
 :root {
-  /* Palette */
   --c-primary:      #FF6B6B;
   --c-primary-soft: #FFB4A2;
   --c-accent:       #957FEF;
@@ -37,14 +15,8 @@
   --c-gold-soft:    #FFF3D4;
   --c-green:        #E8A0BF;
   --c-success:      #4CAF50;
+  --c-teal:         #5BC0BE;
 
-  /* Card gradient — swapped green for a warm coral-peach */
-  --c-card-grad-a:  #FF6B6B;
-  --c-card-grad-b:  #957FEF;
-  --c-card-grad-c:  #F4C95D;
-  --c-card-grad-d:  #FFB4A2;
-
-  /* Surfaces — slightly richer/warmer base for better blob visibility */
   --c-bg:           #EDE4D8;
   --c-surface:      #FAF5EE;
   --c-surface-alt:  #F2EBE0;
@@ -52,7 +24,6 @@
   --c-glass-strong: rgba(255, 248, 242, 0.55);
   --c-glass-border: rgba(255, 255, 255, 0.45);
 
-  /* Text */
   --c-heading:      #1A1A1A;
   --c-text:         #2D2D2D;
   --c-muted:        #7A7A7A;
@@ -60,11 +31,9 @@
   --c-shadow:       rgba(0, 0, 0, 0.08);
   --c-glow:         rgba(255, 107, 107, 0.14);
 
-  /* Typography */
   --f-heading: 'DM Serif Display', serif;
   --f-body:    'DM Sans', sans-serif;
 
-  /* Spacing */
   --s-xs:  6px;
   --s-sm:  12px;
   --s-md:  20px;
@@ -72,14 +41,12 @@
   --s-xl:  48px;
   --s-2xl: 72px;
 
-  /* Radii */
   --r-sm:   10px;
   --r-md:   16px;
   --r-lg:   24px;
   --r-xl:   32px;
   --r-full: 999px;
 
-  /* Transitions */
   --t-fast:   0.18s ease;
   --t-med:    0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --t-slow:   0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -153,7 +120,6 @@ button, input, select {
   overflow: hidden;
 }
 
-/* Gradient blobs — four for extra depth */
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -162,9 +128,7 @@ button, input, select {
   will-change: transform;
 }
 
-[data-theme="dark"] .blob {
-  opacity: 0.08;
-}
+[data-theme="dark"] .blob { opacity: 0.08; }
 
 .blob-1 {
   width: 55vw; height: 55vw;
@@ -201,7 +165,6 @@ button, input, select {
 
 [data-theme="dark"] .blob-4 { opacity: 0.05; }
 
-/* Particle canvas fills the background scene */
 #particle-canvas {
   position: absolute;
   inset: 0;
@@ -279,7 +242,7 @@ button, input, select {
 
 
 /* ================================================================
-   7. GLASS BUTTONS (shared icon button style)
+   7. GLASS BUTTONS
    ================================================================ */
 .glass-btn {
   position: relative;
@@ -297,9 +260,7 @@ button, input, select {
   transition: all var(--t-fast);
 }
 
-.glass-btn svg {
-  width: 18px; height: 18px;
-}
+.glass-btn svg { width: 18px; height: 18px; }
 
 .glass-btn:hover {
   transform: scale(1.08);
@@ -307,19 +268,14 @@ button, input, select {
   box-shadow: 0 4px 16px var(--c-shadow);
 }
 
-.glass-btn:active {
-  transform: scale(0.95);
-}
+.glass-btn:active { transform: scale(0.95); }
 
 .glass-btn:focus-visible {
   outline: 2px solid var(--c-accent);
   outline-offset: 2px;
 }
 
-/* Favorites badge */
-.favs-wrapper {
-  position: relative;
-}
+.favs-wrapper { position: relative; }
 
 .badge {
   position: absolute;
@@ -339,23 +295,78 @@ button, input, select {
   pointer-events: none;
 }
 
-.badge.show {
-  transform: scale(1);
+.badge.show { transform: scale(1); }
+
+
+/* ================================================================
+   8. MODE TOGGLE (Compliments / Jokes)
+   ================================================================ */
+.mode-toggle {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: var(--r-full);
+  background: var(--c-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--c-glass-border);
+}
+
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: var(--r-full);
+  border: none;
+  background: transparent;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.mode-btn:hover {
+  color: var(--c-text);
+}
+
+.mode-btn.active {
+  background: var(--c-surface);
+  color: var(--c-heading);
+  box-shadow: 0 2px 8px var(--c-shadow);
+}
+
+[data-theme="dark"] .mode-btn.active {
+  background: var(--c-surface-alt);
+}
+
+.mode-emoji {
+  font-size: 1rem;
 }
 
 
 /* ================================================================
-   8. CONTROLS
+   9. CONTROLS (name input)
    ================================================================ */
 .controls {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
   gap: var(--s-sm);
+  transition: opacity 0.3s ease, max-height 0.4s ease;
+  overflow: hidden;
+  max-height: 80px;
+}
+
+.controls.collapsed {
+  opacity: 0;
+  max-height: 0 !important;
+  margin: 0;
+  pointer-events: none;
 }
 
 .input-group {
-  flex: 1 1 200px;
+  flex: 1;
   min-width: 0;
   position: relative;
 }
@@ -383,9 +394,7 @@ button, input, select {
   transition: border-color var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
 }
 
-.ctrl-input::placeholder {
-  color: var(--c-muted);
-}
+.ctrl-input::placeholder { color: var(--c-muted); }
 
 .ctrl-input:focus {
   outline: none;
@@ -399,18 +408,9 @@ button, input, select {
   color: var(--c-accent);
 }
 
-select.ctrl-input {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237A7A7A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  padding-right: 40px;
-}
-
 
 /* ================================================================
-   9. COMPLIMENT CARD
+   10. CARD
    ================================================================ */
 .card {
   width: 100%;
@@ -418,10 +418,6 @@ select.ctrl-input {
   border-radius: var(--r-xl);
   padding: 0;
   background: transparent;
-}
-
-.card-glow {
-  display: none;
 }
 
 .card-inner {
@@ -438,12 +434,32 @@ select.ctrl-input {
   box-shadow: none;
 }
 
-[data-theme="dark"] .card-inner {
-  background: rgba(26, 26, 36, 0.6);
-  box-shadow: none;
+.card-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-xl);
+  background-image: var(--bg-image, none);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.7s ease;
+  pointer-events: none;
 }
 
-/* Top shine line */
+.card-inner.has-bg-image::after {
+  opacity: 0.3;
+}
+
+[data-theme="dark"] .card-inner.has-bg-image::after {
+  opacity: 0.12;
+}
+
+[data-theme="dark"] .card-inner {
+  background: rgba(26, 26, 36, 0.6);
+}
+
 .card-inner::before {
   content: '';
   position: absolute;
@@ -457,84 +473,14 @@ select.ctrl-input {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
 }
 
-/* Watermark — hidden */
-.card-watermark {
-  display: none;
-}
-
-/* Watercolor background image */
-.card-bg-art {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-xl);
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-
-.card-bg-art.visible {
-  opacity: 1;
-}
-
-.card-bg-art svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-[data-theme="dark"] .card-bg-art {
-  opacity: 0;
-}
-
-[data-theme="dark"] .card-bg-art.visible {
-  opacity: 0.35;
-}
-
-/* Ensure card content sits above the watercolor wash ::after */
-.category-pill,
 .compliment,
 .card-actions {
   position: relative;
   z-index: 1;
 }
 
-/* Category pill */
-.category-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 16px;
-  border-radius: var(--r-full);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background: var(--c-surface-alt);
-  color: var(--c-muted);
-  margin-bottom: var(--s-md);
-  transition: all var(--t-med);
-}
-
-.pill-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--c-muted);
-  transition: background var(--t-med);
-}
-
-/* Category dot colors */
-.pill-encouragement .pill-dot { background: var(--c-primary); }
-.pill-professional .pill-dot  { background: var(--c-accent); }
-.pill-humor .pill-dot          { background: var(--c-gold); }
-/* Kindness: warm coral-pink instead of green */
-.pill-kindness .pill-dot       { background: #F07A7A; }
-
 /* Compliment text */
 .compliment {
-  position: relative;
-  z-index: 1;
   font-family: var(--f-heading);
   font-size: clamp(1.3rem, 3.2vw, 2.15rem);
   color: var(--c-heading);
@@ -546,7 +492,6 @@ select.ctrl-input {
   padding: var(--s-sm) 0;
   border: none;
   margin: 0;
-  quotes: "\u201C" "\u201D";
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
@@ -562,7 +507,59 @@ select.ctrl-input {
 
 
 /* ================================================================
-   10. ACTION CHIPS
+   10b. JOKE-SPECIFIC STYLES
+   ================================================================ */
+.joke-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.joke-setup {
+  font-family: var(--f-heading);
+  font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+  color: var(--c-heading);
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.joke-punchline {
+  font-family: var(--f-heading);
+  font-size: clamp(1.3rem, 3.2vw, 2.15rem);
+  color: var(--c-teal);
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.joke-punchline.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-tap {
+  font-family: var(--f-body);
+  font-size: 0.75rem;
+  color: var(--c-muted);
+  margin-top: 10px;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: var(--r-full);
+  border: 1px dashed var(--c-border);
+  transition: all var(--t-fast);
+}
+
+.reveal-tap:hover {
+  color: var(--c-teal);
+  border-color: var(--c-teal);
+}
+
+
+/* ================================================================
+   11. ACTION CHIPS
    ================================================================ */
 .card-actions {
   display: flex;
@@ -610,18 +607,14 @@ select.ctrl-input {
   outline-offset: 2px;
 }
 
-/* Favorited state */
 .action-chip.faved {
   border-color: var(--c-gold);
   color: var(--c-gold);
   background: var(--c-gold-soft);
 }
 
-.action-chip.faved svg {
-  fill: var(--c-gold);
-}
+.action-chip.faved svg { fill: var(--c-gold); }
 
-/* Copied state */
 .action-chip.copied {
   border-color: var(--c-success);
   color: var(--c-success);
@@ -629,7 +622,7 @@ select.ctrl-input {
 
 
 /* ================================================================
-   11. GENERATE BUTTON
+   12. GENERATE BUTTON
    ================================================================ */
 .generate-area {
   display: flex;
@@ -666,22 +659,18 @@ select.ctrl-input {
     0 4px 12px rgba(149, 127, 239, 0.25);
 }
 
-.generate-btn:active {
-  transform: translateY(0) scale(0.97);
-}
+.generate-btn:active { transform: translateY(0) scale(0.97); }
 
 .generate-btn:focus-visible {
   outline: 2px solid var(--c-gold);
   outline-offset: 3px;
 }
 
-/* Sparkle emoji bounce */
 .btn-sparkle {
   display: inline-block;
   animation: sparkleFloat 2s ease-in-out infinite;
 }
 
-/* Shimmer sweep */
 .generate-btn::after {
   content: '';
   position: absolute;
@@ -696,7 +685,6 @@ select.ctrl-input {
   animation: shimmer 3.5s ease-in-out infinite;
 }
 
-/* Ripple on click */
 .generate-btn .ripple {
   position: absolute;
   border-radius: 50%;
@@ -706,17 +694,9 @@ select.ctrl-input {
   pointer-events: none;
 }
 
-/* Counter */
-.counter {
-  font-size: 0.75rem;
-  color: var(--c-muted);
-  height: 18px;
-  transition: color var(--t-fast);
-}
-
 
 /* ================================================================
-   12. TOAST
+   13. TOAST
    ================================================================ */
 .toast {
   position: fixed;
@@ -743,7 +723,7 @@ select.ctrl-input {
 
 
 /* ================================================================
-   13. MODAL
+   14. MODAL
    ================================================================ */
 .modal-overlay {
   position: fixed;
@@ -826,7 +806,7 @@ select.ctrl-input {
   line-height: 1.55;
 }
 
-.fav-cat {
+.fav-type {
   font-size: 0.68rem;
   color: var(--c-muted);
   text-transform: uppercase;
@@ -874,7 +854,7 @@ select.ctrl-input {
 
 
 /* ================================================================
-   14. CONFETTI
+   15. CONFETTI
    ================================================================ */
 .confetti-container {
   position: fixed;
@@ -893,7 +873,7 @@ select.ctrl-input {
 
 
 /* ================================================================
-   15. HERO / TYPOGRAPHY
+   16. HERO / TYPOGRAPHY
    ================================================================ */
 .hero-text {
   text-align: center;
@@ -918,7 +898,7 @@ select.ctrl-input {
 
 
 /* ================================================================
-   16. FOOTER
+   17. FOOTER
    ================================================================ */
 .footer {
   margin-top: auto;
@@ -931,15 +911,13 @@ select.ctrl-input {
 
 
 /* ================================================================
-   17. UTILITIES
+   18. UTILITIES
    ================================================================ */
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
 
 /* ================================================================
-   18. ANIMATIONS / KEYFRAMES
+   19. ANIMATIONS / KEYFRAMES
    ================================================================ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -960,12 +938,6 @@ select.ctrl-input {
   0%, 100% { transform: scale(1); }
   12%      { transform: scale(1.18); }
   24%      { transform: scale(1); }
-}
-
-@keyframes borderShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 @keyframes shimmer {
@@ -1013,55 +985,20 @@ select.ctrl-input {
 
 
 /* ================================================================
-   19. RESPONSIVE BREAKPOINTS
+   20. RESPONSIVE BREAKPOINTS
    ================================================================ */
 @media (max-width: 640px) {
-  .card-inner {
-    padding: var(--s-lg) var(--s-md);
-  }
-
-  .card-watermark {
-    font-size: 5.5rem;
-  }
-
-  .generate-btn {
-    padding: 15px 32px;
-    font-size: 0.95rem;
-  }
-
-  .controls {
-    gap: var(--s-xs);
-  }
-
-  .header {
-    margin-bottom: var(--s-md);
-  }
-
-  .card-actions {
-    gap: 8px;
-  }
-
-  /* Hide action label text on small screens, keep icons */
-  .action-chip span:not(:first-child) {
-    display: none;
-  }
-
-  .hero-text h1 {
-    font-size: clamp(1.5rem, 6vw, 2.2rem);
-  }
+  .card-inner { padding: var(--s-lg) var(--s-md); }
+  .generate-btn { padding: 15px 32px; font-size: 0.95rem; }
+  .header { margin-bottom: var(--s-md); }
+  .card-actions { gap: 8px; }
+  .action-chip span:not(:first-child) { display: none; }
+  .hero-text h1 { font-size: clamp(1.5rem, 6vw, 2.2rem); }
+  .mode-btn { padding: 8px 16px; font-size: 0.82rem; }
 }
 
 @media (max-width: 380px) {
-  .app {
-    padding: var(--s-sm) var(--s-sm) var(--s-lg);
-  }
-
-  .card-inner {
-    padding: var(--s-md);
-  }
-
-  .compliment {
-    font-size: 1.15rem;
-    min-height: 80px;
-  }
+  .app { padding: var(--s-sm) var(--s-sm) var(--s-lg); }
+  .card-inner { padding: var(--s-md); }
+  .compliment { font-size: 1.15rem; min-height: 80px; }
 }

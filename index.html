@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Uplift — Compliment Generator</title>
+  <title>Uplift — Compliment & Joke Generator</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,6 @@
 
   <!-- ============================================
        BACKGROUND SCENE
-       Layered blobs + particle canvas for depth
        ============================================ -->
   <div class="bg-scene" aria-hidden="true">
     <div class="blob blob-1"></div>
@@ -27,7 +26,7 @@
     <canvas id="particle-canvas"></canvas>
   </div>
 
-  <!-- Confetti container for favorite bursts -->
+  <!-- Confetti container -->
   <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
 
   <!-- ============================================
@@ -37,7 +36,7 @@
 
     <!-- HEADER -->
     <header class="header">
-      <a href="#" class="logo" aria-label="Uplift — Compliment Generator">
+      <a href="#" class="logo" aria-label="Uplift">
         <span class="logo-icon" aria-hidden="true"></span>
         <span class="logo-text">Uplift</span>
       </a>
@@ -79,8 +78,22 @@
         <h1>A little warmth<br><em>goes a long way.</em></h1>
       </div>
 
-      <!-- Controls -->
-      <div class="controls">
+      <!-- Mode Toggle: Compliments vs Jokes -->
+      <div class="mode-toggle" role="radiogroup" aria-label="Choose mode">
+        <button class="mode-btn active" id="mode-compliments" role="radio" aria-checked="true">
+          <span class="mode-emoji">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#E8788A" stroke="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </span> Compliments
+        </button>
+        <button class="mode-btn" id="mode-jokes" role="radio" aria-checked="false">
+          <span class="mode-emoji">😂</span> Jokes
+        </button>
+      </div>
+
+      <!-- Name input (compliments mode only) -->
+      <div class="controls" id="compliment-controls">
         <div class="input-group">
           <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -91,39 +104,16 @@
             placeholder="Your name (optional)"
             aria-label="Enter your name for personalized compliments" maxlength="30">
         </div>
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
-            <line x1="8" y1="18" x2="21" y2="18"/>
-            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
-            <line x1="3" y1="18" x2="3.01" y2="18"/>
-          </svg>
-          <select class="ctrl-input" id="category-select"
-            aria-label="Select compliment category">
-            <option value="all">All Categories</option>
-            <option value="encouragement">Encouragement</option>
-            <option value="professional">Professional</option>
-            <option value="humor">Humor</option>
-            <option value="kindness">Kindness</option>
-          </select>
-        </div>
       </div>
 
-      <!-- Compliment Card -->
+      <!-- Card -->
       <section class="card" id="card" aria-live="polite" aria-atomic="true">
-        <div class="card-glow" aria-hidden="true"></div>
         <div class="card-inner">
-          <span class="card-watermark" id="card-watermark" aria-hidden="true">✨</span>
-          <div class="category-pill" id="category-pill">
-            <span class="pill-dot"></span>
-            <span class="pill-label">Ready</span>
-          </div>
           <blockquote class="compliment" id="compliment-text">
             Tap the button below to brighten your day.
           </blockquote>
           <div class="card-actions">
-            <button class="action-chip" id="copy-btn" aria-label="Copy compliment to clipboard">
+            <button class="action-chip" id="copy-btn" aria-label="Copy to clipboard">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
@@ -139,7 +129,7 @@
               </svg>
               <span>Favorite</span>
             </button>
-            <button class="action-chip" id="share-btn" aria-label="Share compliment">
+            <button class="action-chip" id="share-btn" aria-label="Share">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/>
@@ -156,10 +146,9 @@
       <!-- Generate Button -->
       <div class="generate-area">
         <button class="generate-btn" id="generate-btn">
-          <span class="btn-text">Generate Compliment</span>
+          <span class="btn-text" id="generate-label">Generate Compliment</span>
           <span class="btn-sparkle" aria-hidden="true">✨</span>
         </button>
-        <p class="counter" id="counter" aria-live="polite"></p>
       </div>
 
     </main>
@@ -190,7 +179,7 @@
     </div>
   </div>
 
-  <!-- JavaScript (loaded at end of body) -->
+  <!-- JavaScript -->
   <script src="app.js"></script>
 </body>
 </html>
